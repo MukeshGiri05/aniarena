@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About AniArena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #111122; /* Darker background from the image */
+            --card-bg: #1a1a2e;
+            --primary: #ff6b35;
+            --secondary: #a855f7; /* Purple accent */
+            --text-color: #eee;
+            --text-muted: #aaa;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* Subtle dot pattern background */
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: transparent;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary);
+        }
+
+        nav a.active {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+        }
+
+        .user-icon {
+            color: var(--text-color);
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            padding: 60px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Mission Section */
+        .mission-section {
+            display: flex;
+            background-color: rgba(20, 20, 35, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .mission-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mission-content .section-title {
+            color: var(--primary);
+        }
+
+        .section-icon {
+            font-size: 24px;
+        }
+
+        .mission-content p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .mission-image {
+            flex: 1;
+            background: linear-gradient(135deg, #0d1b2a, #1b263b);
+            position: relative;
+            min-height: 300px;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Vibe Section */
+        .vibe-section {
+            display: flex;
+            gap: 30px;
+        }
+
+        .vibe-image {
+            flex: 1;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #2c003e, #4c0070);
+            min-height: 300px;
+        }
+
+        .vibe-content {
+            flex: 1.5;
+            background-color: rgba(20, 20, 35, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .vibe-content .section-title {
+            color: #e879f9;
+        }
+
+        .vibe-content p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .vibe-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .vibe-list li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .check-icon {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        /* How We Started Section */
+        .started-section {
+            background-color: rgba(20, 20, 35, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .started-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.02),
+                rgba(255, 255, 255, 0.02) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            pointer-events: none;
+        }
+
+        .started-section .section-title {
+            justify-content: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .started-section p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+        }
+
+        .stat-item h3 {
+            color: var(--primary);
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-item span {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(to bottom, rgba(255, 107, 53, 0.05), rgba(255, 107, 53, 0.1));
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        /* Footer */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px;
+            background-color: rgba(10, 10, 20, 0.8);
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .footer-logo {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .mission-section, .vibe-section {
+                flex-direction: column;
+            }
+            .stats {
+                gap: 30px;
+                flex-wrap: wrap;
+            }
+            .hero h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">AniArena</a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Play</a></li>
+                <li><a href="how-to-play.html">How to Play</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="anime.html">Anime</a></li>
+            </ul>
+        </nav>
+        <a href="#" class="user-icon">👤</a>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>About <span>ANIARENA</span> — Where Every<br>Scribble Tells a Story</h1>
+            <p>Bridging the gap between messy sketches and digital masterpieces in a high-octane social drawing experience.</p>
+            <div class="hero-buttons">
+                <a href="index.html" class="btn btn-primary">Start Drawing</a>
+                <a href="#" class="btn btn-outline">View Gallery</a>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="mission-section">
+            <div class="mission-content">
+                <h2 class="section-title"><span class="section-icon">✨</span> Our Mission</h2>
+                <p>We're building the ultimate playground for anime fans to connect through art and laughter. Our mission is to democratize the creative process, turning the solitary act of drawing into a chaotic, thrilling team sport.</p>
+                <p>By blending neo-Tokyo aesthetics with cutting-edge canvas tools, we've created a space where global Otaku culture finds its digital canvas.</p>
+            </div>
+            <div class="mission-image">
+                <!-- Using a placeholder div that mimics the vibe of the image -->
+            </div>
+        </section>
+
+        <!-- Vibe Section -->
+        <section class="vibe-section">
+            <div class="vibe-image">
+                <!-- Using a placeholder div that mimics the vibe of the image -->
+            </div>
+            <div class="vibe-content">
+                <h2 class="section-title"><span class="section-icon">🎭</span> The AniArena Vibe</h2>
+                <p>You don't need to be an artist to play — bad drawings are part of the fun. In fact, some of our most legendary moments come from the most "creative" interpretations of prompts.</p>
+                <ul class="vibe-list">
+                    <li><span class="check-icon">✓</span> ZERO JUDGEMENT ZONE</li>
+                    <li><span class="check-icon">✓</span> CHAOS-FIRST GAMEPLAY</li>
+                    <li><span class="check-icon">✓</span> 100% COMMUNITY POWERED</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- How We Started Section -->
+        <section class="started-section">
+            <h2 class="section-title"><span class="section-icon">👥</span> How We Started</h2>
+            <p>AniArena was born in a cramped apartment filled with manga volumes and empty ramen cups. We're a small team of Otaku creators who wanted a better way to play with friends online. What started as a simple browser sketch tool evolved into the neon-lit arena you see today.</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <h3>01</h3>
+                    <span>FOUNDERS</span>
+                </div>
+                <div class="stat-item">
+                    <h3>100k+</h3>
+                    <span>SCRIBBLES</span>
+                </div>
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <span>COUNTRIES</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to enter the arena?</h2>
+            <p>Join thousands of other sketchers and show us what you've got.</p>
+            <a href="index.html" class="btn btn-primary">ENTER THE ARENA NOW</a>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <a href="index.html" class="footer-logo">ANIARENA</a>
+            <div class="copyright">&copy; 2026 Pixel_01 Studios. All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="#">PRIVACY</a>
+            <a href="#">TERMS</a>
+            <a href="#">DISCORD</a>
+            <a href="#">TWITTER</a>
+        </div>
+    </footer>
+
+</body>
+</html>
