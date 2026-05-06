@@ -340,13 +340,15 @@
                     const card = document.createElement('div');
                     card.className = 'anime-card';
                     
-                    // Fallbacks for missing data since your current mock API only returns id, name, and genre
-                    const title = anime.title || anime.name || 'Unknown Title';
+                    // Exact data mapping based on your D1 database schema
+                    const title = anime.name || 'Unknown Title';
                     const genre = anime.genre || 'Unknown Genre';
                     const rating = anime.rating || 'N/A';
-                    const episodes = anime.episodes || '?';
+                    const status = anime.status || 'Unknown';
+                    const releaseYear = anime.release_year || 'Unknown Year';
+                    const studio = anime.studio || 'Unknown Studio';
                     const desc = anime.description || 'No description available.';
-                    const image = anime.image || 'https://via.placeholder.com/600x400/2a2a4a/eee?text=No+Image';
+                    const image = anime.image_url || 'https://via.placeholder.com/600x400/2a2a4a/eee?text=No+Image';
 
                     card.innerHTML = `
                         <img src="${image}" alt="${title}" class="anime-image">
@@ -358,7 +360,8 @@
                             </div>
                             <p class="anime-desc">${desc}</p>
                             <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">
-                                <span>Episodes: ${episodes}${episodes >= 1000 ? '+' : ''}</span>
+                                <span>Status: <span style="text-transform: capitalize;">${status}</span></span>
+                                <span>${studio} • ${releaseYear}</span>
                             </div>
                             <a href="#" class="btn-view" onclick="event.preventDefault(); alert('Details page coming soon!');">View Details</a>
                         </div>
