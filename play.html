@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniArena - Anime Drawing & Guessing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #111122;
+            --card-bg: #1a1a2e;
+            --primary: #ff6b35;
+            --secondary: #a855f7;
+            --text-color: #eee;
+            --text-muted: #aaa;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-y: scroll;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: transparent;
+            min-height: 86px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: #d97743;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            background: linear-gradient(to bottom, #f2a65a, #b05c30);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Nav Pills Group */
+        nav ul {
+            display: flex;
+            list-style: none;
+            background: rgba(30, 35, 50, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        nav li {
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        nav li:last-child {
+            border-right: none;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 24px;
+            display: block;
+            transition: all 0.3s;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border: 1px solid transparent;
+        }
+
+        nav li:first-child a {
+            border-top-left-radius: 13px;
+            border-bottom-left-radius: 13px;
+        }
+
+        nav li:last-child a {
+            border-top-right-radius: 13px;
+            border-bottom-right-radius: 13px;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        nav a.active {
+            border: 1px solid rgba(255, 150, 80, 0.8);
+            color: #ff9d66;
+            background: rgba(255, 107, 53, 0.15);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.3) inset, 0 0 10px rgba(255, 107, 53, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Search Tab */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(20, 25, 40, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 5px 15px;
+            height: 46px; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) inset;
+        }
+
+        .search-container svg {
+            color: var(--text-muted);
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+        }
+
+        .search-container input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            outline: none;
+            width: 120px;
+            padding: 0;
+        }
+
+        .search-container .search-btn {
+            background: transparent;
+            border: none;
+            color: #d97743;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            padding-left: 10px;
+            letter-spacing: 1px;
+            margin: 0;
+            box-shadow: none;
+            border-radius: 0;
+        }
+        .search-container .search-btn:hover {
+            color: var(--primary);
+            transform: none;
+            opacity: 1;
+        }
+
+        /* Profile Button */
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 35, 50, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            width: 46px;
+            height: 46px;
+            color: #8b5cf6;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .profile-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .profile-btn .sparkle {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Game Area */
+        .game-area {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        /* Left Column (Canvas) */
+        .left-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            background-color: white;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            cursor: crosshair;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 100%;
+            touch-action: none;
+            /* Prevent scrolling while drawing on touch */
+        }
+
+        .tools {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Right Column (Controls) */
+        .right-col {
+            flex: 1;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .debug-panel {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            color: #ff9f1c;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .score-value {
+            color: var(--primary);
+            font-size: 32px;
+        }
+
+        .guess-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            background-color: #0f172a;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .message {
+            min-height: 24px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .success {
+            color: #4ade80;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        /* Buttons */
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.1s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            padding: 0;
+            border: 2px solid white;
+        }
+
+        .btn-black {
+            background-color: black;
+        }
+
+        .btn-red {
+            background-color: #ef4444;
+        }
+
+        .btn-blue {
+            background-color: #3b82f6;
+        }
+
+        .btn-green {
+            background-color: #22c55e;
+        }
+
+        .btn-secondary {
+            background-color: #475569;
+        }
+
+        .btn-block {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+        }
+
+        /* How it works */
+        .how-it-works {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Additional Sections */
+        .started-section {
+            background-color: rgba(20, 20, 35, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 60px;
+        }
+
+        .started-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(45deg,
+                    rgba(255, 255, 255, 0.02),
+                    rgba(255, 255, 255, 0.02) 10px,
+                    transparent 10px,
+                    transparent 20px);
+            pointer-events: none;
+        }
+
+        .started-section .section-title {
+            margin-bottom: 20px;
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .started-section p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item h3 {
+            color: var(--primary);
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-item span {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            background: linear-gradient(to bottom, rgba(255, 107, 53, 0.05), rgba(255, 107, 53, 0.1));
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px;
+            background-color: rgba(10, 10, 20, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .footer-logo {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .game-area {
+                flex-direction: column;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="logo">ANIARENA</a>
+        <div class="header-controls">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Anime</a></li>
+                    <li><a href="play.html" class="active">Play</a></li>
+                    <li><a href="how-to-play.html">How to Play</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+
+            <a href="#" class="profile-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span class="sparkle">✨</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="game-area">
+
+            <!-- LEFT COLUMN -->
+            <div class="left-col">
+                <canvas id="drawingCanvas" width="500" height="500"></canvas>
+                <div class="tools">
+                    <button id="btnClear" class="btn-secondary">Clear Canvas</button>
+                    <button class="color-btn btn-black" data-color="#000000" title="Black"></button>
+                    <button class="color-btn btn-red" data-color="#ef4444" title="Red"></button>
+                    <button class="color-btn btn-blue" data-color="#3b82f6" title="Blue"></button>
+                    <button class="color-btn btn-green" data-color="#22c55e" title="Green"></button>
+                    <button id="btnEraser" class="btn-secondary">Eraser</button>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="right-col">
+                <div class="debug-panel">
+                    Secret Character: ??? <br>
+                    <small style="color:#aaa;">Current character: <span id="debugChar">Loading...</span></small>
+                </div>
+
+                <div class="score-board">
+                    <span>Current Score</span>
+                    <span class="score-value" id="scoreDisplay">0</span>
+                </div>
+
+                <button id="btnResetScore" class="btn-secondary"
+                    style="align-self: flex-start; padding: 5px 15px; font-size: 14px;">Reset Score</button>
+
+                <div class="guess-section">
+                    <input type="text" id="guessInput" placeholder="Type anime character name..." autocomplete="off">
+                    <button id="btnSubmitGuess" class="btn-block">Submit Guess</button>
+                </div>
+
+                <div id="messageArea" class="message"></div>
+
+                <button id="btnNewRound" class="btn-block btn-secondary" style="margin-top: auto;">Start New
+                    Round</button>
+            </div>
+
+        </div>
+
+        <!-- How We Started Section -->
+        <section class="started-section">
+            <h2 class="section-title"><span class="section-icon">👥</span> How We Started</h2>
+            <p>AniArena was born in a cramped apartment filled with manga volumes and empty ramen cups. We're a small
+                team of Otaku creators who wanted a better way to play with friends online. What started as a simple
+                browser sketch tool evolved into the neon-lit arena you see today.</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <h3>01</h3>
+                    <span>FOUNDERS</span>
+                </div>
+                <div class="stat-item">
+                    <h3>100k+</h3>
+                    <span>SCRIBBLES</span>
+                </div>
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <span>COUNTRIES</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to enter the arena?</h2>
+            <p>Join thousands of other sketchers and show us what you've got.</p>
+            <a href="play.html" class="btn-primary">ENTER THE ARENA NOW</a>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <a href="index.html" class="footer-logo">ANIARENA</a>
+            <div class="copyright">&copy; 2026 Pixel_01 Studios. All rights reserved.</div>
+        </div>
+        <div class="footer-links">
+            <a href="#">PRIVACY</a>
+            <a href="#">TERMS</a>
+            <a href="#">DISCORD</a>
+            <a href="#">TWITTER</a>
+        </div>
+    </footer>
+
+    <script>
+        // Game Logic Data
+        const characterList = [
+            "Naruto", "Luffy", "Goku", "Gojo", "Levi",
+            "Tanjiro", "Zoro", "Sasuke", "Deku", "Saitama"
+        ];
+
+        let currentSecretCharacter = "";
+        let score = 0;
+
+        // DOM Elements
+        const debugCharEl = document.getElementById('debugChar');
+        const scoreDisplayEl = document.getElementById('scoreDisplay');
+        const guessInputEl = document.getElementById('guessInput');
+        const messageAreaEl = document.getElementById('messageArea');
+        const btnSubmitGuess = document.getElementById('btnSubmitGuess');
+        const btnResetScore = document.getElementById('btnResetScore');
+        const btnNewRound = document.getElementById('btnNewRound');
+
+        // Canvas Setup
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let isDrawing = false;
+        let currentBrushColor = '#000000';
+        let currentBrushSize = 5;
+
+        // Set initial canvas background to white
+        function clearCanvas() {
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Initialize Game
+        function initGame() {
+            score = 0;
+            updateScoreDisplay();
+            startNewRound();
+        }
+
+        function startNewRound() {
+            // Pick random character
+            let newChar = characterList[Math.floor(Math.random() * characterList.length)];
+
+            // Try not to repeat the immediate previous character if possible
+            while (newChar === currentSecretCharacter && characterList.length > 1) {
+                newChar = characterList[Math.floor(Math.random() * characterList.length)];
+            }
+
+            currentSecretCharacter = newChar;
+            debugCharEl.textContent = currentSecretCharacter;
+
+            clearCanvas();
+            guessInputEl.value = "";
+            messageAreaEl.textContent = "";
+            messageAreaEl.className = "message"; // reset classes
+        }
+
+        function updateScoreDisplay() {
+            scoreDisplayEl.textContent = score;
+        }
+
+        function checkGuess() {
+            const userGuess = guessInputEl.value.trim().toLowerCase();
+            const actualChar = currentSecretCharacter.toLowerCase();
+
+            if (!userGuess) return;
+
+            if (userGuess === actualChar) {
+                score += 10;
+                updateScoreDisplay();
+                showMessage("Correct! +10 points", "success");
+                setTimeout(() => {
+                    startNewRound();
+                }, 1500); // short delay to see the success message
+            } else {
+                showMessage("Wrong guess! Try again", "error");
+                guessInputEl.value = "";
+                guessInputEl.focus();
+            }
+        }
+
+        function showMessage(text, type) {
+            messageAreaEl.textContent = text;
+            messageAreaEl.className = `message ${type}`;
+        }
+
+        // Event Listeners: Game Controls
+        btnSubmitGuess.addEventListener('click', checkGuess);
+        guessInputEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+
+        btnResetScore.addEventListener('click', () => {
+            score = 0;
+            updateScoreDisplay();
+        });
+
+        btnNewRound.addEventListener('click', startNewRound);
+
+        // Event Listeners: Drawing Tools
+        document.getElementById('btnClear').addEventListener('click', clearCanvas);
+
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                currentBrushColor = e.target.dataset.color;
+                currentBrushSize = 5; // Reset size for colors
+            });
+        });
+
+        document.getElementById('btnEraser').addEventListener('click', () => {
+            currentBrushColor = '#ffffff'; // Match canvas background
+            currentBrushSize = 20; // Make eraser bigger
+        });
+
+        // Event Listeners: Canvas Drawing
+        function getMousePos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            // Scale mouse coordinates to match canvas resolution
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (evt.clientX - rect.left) * scaleX,
+                y: (evt.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e); // allow dots
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath(); // reset path so next stroke doesn't connect
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+
+            // Prevent scrolling on touch devices while drawing
+            if (e.type.includes('touch')) {
+                e.preventDefault();
+            }
+
+            const pos = getMousePos(canvas, e.touches ? e.touches[0] : e);
+
+            ctx.lineWidth = currentBrushSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentBrushColor;
+
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch support
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        // Start!
+        initGame();
+
+    </script>
+
+</body>
+
+</html>
