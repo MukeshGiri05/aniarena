@@ -29,6 +29,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-y: scroll;
             background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
             background-size: 30px 30px;
         }
@@ -40,6 +41,7 @@
             align-items: center;
             padding: 20px 40px;
             background-color: transparent;
+            min-height: 86px;
         }
 
         .logo {
@@ -90,16 +92,17 @@
             display: block;
             transition: all 0.3s;
             background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border: 1px solid transparent;
         }
 
         nav li:first-child a {
-            border-top-left-radius: 14px;
-            border-bottom-left-radius: 14px;
+            border-top-left-radius: 13px;
+            border-bottom-left-radius: 13px;
         }
 
         nav li:last-child a {
-            border-top-right-radius: 14px;
-            border-bottom-right-radius: 14px;
+            border-top-right-radius: 13px;
+            border-bottom-right-radius: 13px;
         }
 
         nav a:hover {
@@ -108,14 +111,11 @@
 
         nav a.active {
             border: 1px solid rgba(255, 150, 80, 0.8);
-            border-radius: 10px;
             color: #ff9d66;
             background: rgba(255, 107, 53, 0.15);
             box-shadow: 0 0 15px rgba(255, 107, 53, 0.3) inset, 0 0 10px rgba(255, 107, 53, 0.4);
             position: relative;
-            transform: scale(1.05);
             z-index: 2;
-            margin: -1px;
         }
 
         /* Search Tab */
