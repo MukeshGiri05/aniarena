@@ -129,6 +129,7 @@
             height: 46px; 
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) inset;
+            position: relative;
         }
 
         .search-container svg {
@@ -167,6 +168,141 @@
             color: var(--primary);
             transform: none;
             opacity: 1;
+        }
+
+        /* Search Dropdown */
+        .search-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 350px;
+            background: rgba(20, 25, 40, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            overflow-y: auto;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+        }
+
+        .search-dropdown.show {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar for dropdown */
+        .search-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+        .search-dropdown::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .search-dropdown::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .search-dropdown::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 12px;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .search-item:hover {
+            background: rgba(255, 107, 53, 0.15);
+            transform: scale(1.02);
+        }
+
+        .search-item-img {
+            width: 50px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #2a2a4a;
+        }
+
+        .search-item-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .search-item-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-item-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-message {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .search-loading-skeleton {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        .skeleton-img {
+            width: 50px;
+            height: 70px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .skeleton-lines {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .skeleton-line {
+            height: 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
         }
 
         /* Profile Button */
@@ -524,8 +660,12 @@
 
             <div class="search-container">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" placeholder=" " id="navSearchInput">
+                <input type="text" placeholder="Search anime..." id="navSearchInput" autocomplete="off">
                 <button class="search-btn">SEARCH</button>
+                
+                <div class="search-dropdown" id="searchDropdown">
+                    <!-- Suggestions will be populated here -->
+                </div>
             </div>
 
             <a href="#" class="profile-btn">
@@ -723,8 +863,7 @@
             }
         }
         
-        function showAnimeDetails(index) {
-            const anime = currentAnimeData[index];
+        function renderAnimeDetail(anime) {
             if (!anime) return;
 
             // Save scroll position
@@ -747,6 +886,11 @@
             
             // Scroll to top
             window.scrollTo(0, 0);
+        }
+
+        function showAnimeDetails(index) {
+            const anime = currentAnimeData[index];
+            renderAnimeDetail(anime);
         }
 
         // Back button logic
@@ -773,6 +917,158 @@
             currentPage++;
             fetchAndRenderAnime();
         });
+
+        // --- Search Logic ---
+        const searchInput = document.getElementById('navSearchInput');
+        const searchDropdown = document.getElementById('searchDropdown');
+        
+        let allAnimeData = null; 
+        let isFetchingAll = false;
+        let searchTimeout = null;
+
+        async function fetchAllAnimeForSearch() {
+            if (allAnimeData !== null || isFetchingAll) return;
+            isFetchingAll = true;
+            try {
+                // Fetch up to 1000 items for local filtering
+                const response = await fetch(`${API_URL}?limit=1000`);
+                if (response.ok) {
+                    allAnimeData = await response.json();
+                }
+            } catch (error) {
+                console.error("Failed to fetch all anime for search", error);
+            } finally {
+                isFetchingAll = false;
+            }
+        }
+
+        function hideDropdown() {
+            searchDropdown.classList.remove('show');
+        }
+
+        function showLoadingSkeleton() {
+            searchDropdown.innerHTML = `
+                <div class="search-loading-skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-lines">
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                        <div class="skeleton-line" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <div class="search-loading-skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-lines">
+                        <div class="skeleton-line" style="width: 70%;"></div>
+                        <div class="skeleton-line" style="width: 40%;"></div>
+                    </div>
+                </div>
+            `;
+            searchDropdown.classList.add('show');
+        }
+
+        function renderSearchMessage(msg) {
+            searchDropdown.innerHTML = `<div class="search-message">${msg}</div>`;
+            searchDropdown.classList.add('show');
+        }
+
+        function renderSearchResults(results, query) {
+            if (results.length === 0) {
+                renderSearchMessage(`No anime found for "${query}"`);
+                return;
+            }
+
+            searchDropdown.innerHTML = '';
+            results.forEach(anime => {
+                const title = anime.name || 'Unknown Title';
+                const rating = anime.rating || 'N/A';
+                const releaseYear = anime.release_year || '';
+                const image = anime.image_url || 'https://via.placeholder.com/600x400/2a2a4a/eee?text=No+Image';
+
+                const item = document.createElement('div');
+                item.className = 'search-item';
+                item.innerHTML = `
+                    <img src="${image}" alt="${title}" class="search-item-img">
+                    <div class="search-item-info">
+                        <div class="search-item-title">${title}</div>
+                        <div class="search-item-meta">
+                            <span style="color: #facc15;">★ ${rating}</span>
+                            ${releaseYear ? `<span>${releaseYear}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                item.onclick = () => {
+                    hideDropdown();
+                    searchInput.value = ''; // Clear after select
+                    renderAnimeDetail(anime);
+                };
+                searchDropdown.appendChild(item);
+            });
+            searchDropdown.classList.add('show');
+        }
+
+        async function performSearch(query) {
+            if (allAnimeData === null) {
+                if (!isFetchingAll) fetchAllAnimeForSearch();
+                // Wait for data to load with a max retry count
+                let retries = 0;
+                while (allAnimeData === null && retries < 30) {
+                    await new Promise(r => setTimeout(r, 100));
+                    retries++;
+                }
+                if (allAnimeData === null) {
+                    renderSearchMessage("Failed to load search data.");
+                    return;
+                }
+            }
+
+            const lowerQuery = query.toLowerCase();
+            const results = allAnimeData.filter(anime => 
+                (anime.name || '').toLowerCase().includes(lowerQuery) ||
+                (anime.genre || '').toLowerCase().includes(lowerQuery)
+            ).slice(0, 5); // Max 5 results for clean UI
+
+            renderSearchResults(results, query);
+        }
+
+        searchInput.addEventListener('focus', () => {
+            fetchAllAnimeForSearch();
+            if (searchInput.value.trim().length > 0) {
+                performSearch(searchInput.value.trim());
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            
+            if (searchTimeout) clearTimeout(searchTimeout);
+            
+            if (query.length === 0) {
+                hideDropdown();
+                return;
+            }
+            
+            showLoadingSkeleton();
+            
+            searchTimeout = setTimeout(() => {
+                performSearch(query);
+            }, 300); // 300ms debounce
+        });
+
+        // Handle Enter key for the first result
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && searchDropdown.classList.contains('show')) {
+                const firstItem = searchDropdown.querySelector('.search-item');
+                if (firstItem) firstItem.click();
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                hideDropdown();
+            }
+        });
+        // --- End Search Logic ---
 
         // Initialize rendering
         document.addEventListener('DOMContentLoaded', fetchAndRenderAnime);
