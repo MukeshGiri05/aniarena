@@ -1028,6 +1028,30 @@
             background-color: rgba(26, 26, 46, 0.9);
         }
         
+        @media (min-width: 901px) and (max-width: 1150px) {
+            header {
+                padding: 15px 20px;
+                min-height: auto;
+            }
+            .logo {
+                font-size: 24px;
+            }
+            .header-controls {
+                gap: 10px;
+            }
+            nav a {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+            .search-container {
+                padding: 5px 10px;
+                height: 40px;
+            }
+            .search-container input {
+                width: 90px;
+            }
+        }
+        
         @media (max-width: 900px) {
             body {
                 padding-top: 190px;
@@ -1435,13 +1459,14 @@
         const API_URL = 'https://silent-lake-36cc.mukeshgiri05.workers.dev/anime'; 
 
         let currentPage = 1;
-        const limit = 10; // Changed to exactly 10 items per page
+        const getCurrentLimit = () => window.innerWidth > 900 ? 12 : 10;
         
         let currentAnimeData = [];
         let scrollPosition = 0;
 
         // Function to render anime cards
         async function fetchAndRenderAnime() {
+            const limit = getCurrentLimit();
             const grid = document.getElementById('animeGrid');
             const pageIndicator = document.getElementById('pageIndicator');
             const prevBtn = document.getElementById('prevPageBtn');
