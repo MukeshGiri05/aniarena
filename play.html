@@ -33,16 +33,32 @@
             overflow-y: scroll;
             background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
             background-size: 30px 30px;
+            padding-top: 86px;
         }
 
         /* Header */
         header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 40px;
             background-color: transparent;
             min-height: 86px;
+            z-index: 1000;
+            transition: background-color 0.3s, backdrop-filter 0.3s, border-bottom 0.3s, padding 0.3s;
+        }
+
+        header.scrolled {
+            background-color: rgba(17, 17, 34, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            padding: 15px 40px;
         }
 
         .logo {
@@ -546,13 +562,23 @@
 
         /* Responsive */
         @media (max-width: 900px) {
+            body {
+                padding-top: 150px;
+            }
+
             .game-area {
                 flex-direction: column;
             }
 
             header {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
+                padding: 15px 20px;
+                min-height: auto;
+            }
+
+            header.scrolled {
+                padding: 10px 20px;
             }
 
             nav ul {
@@ -842,6 +868,18 @@
 
         // Start!
         initGame();
+
+        // Sticky Top Navigation scroll handler
+        const handleScroll = () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Set correct state on load
 
     </script>
 
