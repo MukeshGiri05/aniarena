@@ -336,13 +336,16 @@
         /* Main Container */
         main {
             flex: 1;
-            padding: 60px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 40px;
+        }
+
+        #listing-view {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            width: 100%;
         }
         
         .page-title {
@@ -491,18 +494,19 @@
             align-items: flex-end;
             padding: 40px;
             margin-bottom: 40px;
-            border-radius: 24px;
+            border-radius: 0;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: none;
             background-size: cover;
             background-position: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            width: 100%;
         }
 
         .detail-hero-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(180deg, rgba(17,17,34,0.3) 0%, rgba(17,17,34,0.8) 60%, rgba(17,17,34,1) 100%);
+            background: linear-gradient(180deg, rgba(17,17,34,0.3) 0%, rgba(17,17,34,0.85) 60%, rgba(17,17,34,1) 100%);
             z-index: 1;
         }
 
@@ -514,6 +518,50 @@
             gap: 35px;
             align-items: flex-end;
             width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        /* Subtle circular back button inside banner */
+        .btn-subtle-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+            padding: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn-subtle-back svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-subtle-back:hover {
+            background: rgba(0, 0, 0, 0.6);
+            color: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-subtle-back:active {
+            transform: scale(0.95);
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .detail-poster-wrapper {
@@ -636,6 +684,10 @@
             grid-template-columns: 280px 1fr;
             gap: 40px;
             align-items: start;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            width: 100%;
         }
 
         .detail-sidebar {
@@ -1034,12 +1086,11 @@
         </div>
 
         <div id="detail-view" style="display: none;">
-            <button id="backBtn" class="btn-view" style="width: auto; padding: 10px 30px; margin-bottom: 30px; display: inline-flex; align-items: center; gap: 8px;">
-                <span style="font-size: 18px;">&larr;</span> Back to Listing
-            </button>
-            
             <!-- Hero banner card layout -->
             <div class="detail-hero" id="detail-hero-banner">
+                <button id="backBtn" class="btn-subtle-back" title="Back to Listing">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                </button>
                 <div class="detail-hero-overlay"></div>
                 <div class="detail-hero-content">
                     <div class="detail-poster-wrapper">
