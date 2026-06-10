@@ -1037,13 +1037,32 @@
             header.scrolled {
                 padding: 10px 20px;
             }
+            #listing-view {
+                padding: 30px 15px;
+            }
             .page-title {
-                font-size: 36px;
+                font-size: 32px;
+                margin-bottom: 15px;
+            }
+            .pagination {
+                margin-top: 25px !important;
+                gap: 10px !important;
+            }
+            .pagination button {
+                padding: 8px 16px !important;
+                font-size: 13px !important;
+            }
+            .detail-hero {
+                padding: 40px 15px 20px;
             }
             .detail-hero-content {
                 grid-template-columns: 1fr;
                 justify-items: center;
                 text-align: center;
+                gap: 20px;
+            }
+            .detail-title-large {
+                font-size: 28px;
             }
             .detail-poster-wrapper {
                 width: 160px;
@@ -1053,12 +1072,35 @@
             }
             .detail-body {
                 grid-template-columns: 1fr;
+                padding: 20px 15px;
+                gap: 25px;
+            }
+            .characters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+                gap: 15px;
+            }
+            .character-card {
+                border-radius: 12px;
+            }
+            .char-half, .va-half {
+                padding: 8px 12px;
+                gap: 8px;
+            }
+            .char-thumb, .va-thumb {
+                width: 40px;
+                height: 40px;
             }
             .episode-card {
                 flex-direction: column;
             }
             .ep-thumb-wrapper {
                 width: 100%;
+            }
+            .ep-details {
+                padding: 15px;
+            }
+            .ep-title {
+                font-size: 14px;
             }
         }
     </style>
@@ -1759,19 +1801,25 @@
             window.scrollTo(0, 0);
         }
 
-        function showAnimeDetails(index) {
+        function showAnimeDetails(index, pushState = true) {
             const anime = currentAnimeData[index];
+            if (!anime) return;
             renderAnimeDetail(anime);
+            if (pushState) {
+                history.pushState({ view: 'detail', anime: anime }, '');
+            }
         }
 
         // Back button logic
         document.getElementById('backBtn').addEventListener('click', () => {
-            // Switch views
-            document.getElementById('detail-view').style.display = 'none';
-            document.getElementById('listing-view').style.display = 'block';
-            
-            // Restore scroll position
-            window.scrollTo(0, scrollPosition);
+            if (history.state && history.state.view === 'detail') {
+                history.back();
+            } else {
+                // Fallback
+                document.getElementById('detail-view').style.display = 'none';
+                document.getElementById('listing-view').style.display = 'block';
+                window.scrollTo(0, scrollPosition);
+            }
         });
 
         // Pagination Event Listeners
@@ -1871,6 +1919,7 @@
                     hideDropdown();
                     searchInput.value = ''; // Clear after select
                     renderAnimeDetail(anime);
+                    history.pushState({ view: 'detail', anime: anime }, '');
                 };
                 searchDropdown.appendChild(item);
             });
@@ -1956,6 +2005,19 @@
             };
             window.addEventListener('scroll', handleScroll);
             handleScroll(); // Set correct state on load
+        });
+
+        // History Popstate handler for back button navigation
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.view === 'detail' && event.state.anime) {
+                renderAnimeDetail(event.state.anime);
+            } else {
+                // Switch views back to listing
+                document.getElementById('detail-view').style.display = 'none';
+                document.getElementById('listing-view').style.display = 'block';
+                // Restore scroll position
+                window.scrollTo(0, scrollPosition);
+            }
         });
     </script>
     
