@@ -2495,21 +2495,6 @@
 
         // Initialize rendering
         document.addEventListener('DOMContentLoaded', () => {
-            // Profile Dropdown logic
-            const profileBtn = document.getElementById('profileBtn');
-            const profileDropdown = document.getElementById('profileDropdown');
-            if (profileBtn && profileDropdown) {
-                profileBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    profileDropdown.classList.toggle('show');
-                });
-                
-                document.addEventListener('click', (e) => {
-                    if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-                        profileDropdown.classList.remove('show');
-                    }
-                });
-            }
 
             fetchAndRenderAnime();
             
