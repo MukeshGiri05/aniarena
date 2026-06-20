@@ -82,7 +82,7 @@
 
         body.light-theme .hero-overlay, 
         body.light-theme .detail-hero-overlay {
-            background: linear-gradient(180deg, rgba(248,250,252,0.3) 0%, rgba(248,250,252,0.85) 60%, rgba(248,250,252,1) 100%);
+            background: linear-gradient(180deg, transparent 0%, rgba(248,250,252,0.9) 70%, rgba(248,250,252,1) 100%);
         }
 
         body.light-theme .detail-title-large, 
@@ -125,6 +125,51 @@
             background: rgba(0, 0, 0, 0.05);
         }
         
+        
+        /* Extra Light Theme Fixes */
+        body.light-theme footer {
+            background-color: var(--bg-color);
+            border-top: 1px solid var(--border-color);
+        }
+        body.light-theme footer p, body.light-theme .footer-links a {
+            color: var(--text-color);
+        }
+        body.light-theme .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .theme-toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .theme-switch {
+            width: 32px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            position: relative;
+            transition: background 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .theme-switch-thumb {
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        body.light-theme .theme-switch {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        body.light-theme .theme-switch-thumb {
+            transform: translateX(14px);
+        }
+
         /* Header */
         header {
             position: fixed;
@@ -752,7 +797,16 @@
                 </button>
                 <div class="profile-dropdown" id="profileDropdown">
                     <a href="#" class="profile-item">Profile</a>
-                    <a href="#" class="profile-item" id="themeToggleBtn">Appearance: Light Mode</a>
+                                        <a href="#" class="profile-item theme-toggle-item" id="themeToggleBtn">
+                        <span style="display: flex; align-items: center; gap: 8px;">
+                            <svg id="themeIconSun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            <svg id="themeIconMoon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            <span id="themeToggleText">Appearance</span>
+                        </span>
+                        <div class="theme-switch">
+                            <div class="theme-switch-thumb"></div>
+                        </div>
+                    </a>
                     <a href="#" class="profile-item">Watchlist</a>
                     <a href="#" class="profile-item">Favorite Anime</a>
                     <div class="profile-divider"></div>
@@ -855,5 +909,42 @@
         window.addEventListener('scroll', handleScroll);
         handleScroll(); // Set correct state on load
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Shared Theme Toggle logic across all pages
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeIconSun = document.getElementById('themeIconSun');
+            const themeIconMoon = document.getElementById('themeIconMoon');
+            
+            function updateThemeUI(isLight) {
+                if (isLight) {
+                    document.body.classList.add('light-theme');
+                    if(themeIconSun) themeIconSun.style.display = 'block';
+                    if(themeIconMoon) themeIconMoon.style.display = 'none';
+                } else {
+                    document.body.classList.remove('light-theme');
+                    if(themeIconSun) themeIconSun.style.display = 'none';
+                    if(themeIconMoon) themeIconMoon.style.display = 'block';
+                }
+            }
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                updateThemeUI(true);
+            }
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isLight = document.body.classList.toggle('light-theme');
+                    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                    updateThemeUI(isLight);
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>
