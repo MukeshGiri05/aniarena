@@ -199,6 +199,95 @@
             gap: 15px;
         }
 
+        
+        /* Light Theme Overrides */
+        body.light-theme {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        }
+        
+        body.light-theme .sidebar-overlay {
+            background: rgba(255, 255, 255, 0.6);
+        }
+        
+        body.light-theme nav ul, 
+        body.light-theme .profile-btn,
+        body.light-theme .hero-actions button.btn-trailer,
+        body.light-theme .sidebar-card,
+        body.light-theme .genre-checkbox {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.05);
+            color: #0f172a;
+        }
+
+        body.light-theme .logo {
+            text-shadow: none;
+        }
+
+        body.light-theme header.scrolled {
+            background-color: rgba(248, 250, 252, 0.85);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .anime-card {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        body.light-theme .anime-card:hover {
+            box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.05), 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        body.light-theme .hero-overlay, 
+        body.light-theme .detail-hero-overlay {
+            background: linear-gradient(180deg, rgba(248,250,252,0.3) 0%, rgba(248,250,252,0.85) 60%, rgba(248,250,252,1) 100%);
+        }
+
+        body.light-theme .detail-title-large, 
+        body.light-theme .detail-synopsis-short {
+            color: var(--text-color);
+            text-shadow: none;
+        }
+
+        body.light-theme .btn-subtle-back,
+        body.light-theme .btn-view,
+        body.light-theme .btn-filter,
+        body.light-theme select.filter-select {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #0f172a;
+        }
+
+        body.light-theme .btn-view:hover,
+        body.light-theme .btn-filter:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme input.search-input {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #0f172a;
+        }
+        body.light-theme input.search-input::placeholder {
+            color: #64748b;
+        }
+
+        body.light-theme .search-dropdown {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .search-item:hover,
+        body.light-theme .profile-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
         /* Header */
         header {
             position: fixed;
@@ -1565,7 +1654,7 @@
                 </button>
                 <div class="profile-dropdown" id="profileDropdown">
                     <a href="#" class="profile-item">Profile</a>
-                    <a href="#" class="profile-item">Settings</a>
+                    <a href="#" class="profile-item" id="themeToggleBtn">Appearance: Light Mode</a>
                     <a href="#" class="profile-item">Watchlist</a>
                     <a href="#" class="profile-item">Favorite Anime</a>
                     <div class="profile-divider"></div>
@@ -1761,6 +1850,23 @@
 
         // Sidebar logic
         document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle logic
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                if (themeToggleBtn) themeToggleBtn.textContent = 'Appearance: Dark Mode';
+            }
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isLight = document.body.classList.toggle('light-theme');
+                    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                    themeToggleBtn.textContent = isLight ? 'Appearance: Dark Mode' : 'Appearance: Light Mode';
+                });
+            }
             // Profile Dropdown logic
             const profileBtn = document.getElementById('profileBtn');
             const profileDropdown = document.getElementById('profileDropdown');
