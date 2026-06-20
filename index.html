@@ -295,27 +295,34 @@
             width: 56px;
             height: 28px;
             border-radius: 14px;
-            background: linear-gradient(to right, #fef3c7 50%, #1e293b 50%);
+            background: #1e293b;
             position: relative;
             cursor: pointer;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 8px;
+            padding: 0 7px;
             box-sizing: border-box;
-            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
             transition: all 0.3s ease;
         }
-        body.light-theme .theme-switch {
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        .theme-switch::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 50%;
+            background: #fef3c7;
+            z-index: 0;
         }
-        .theme-switch-sun { color: #f59e0b; z-index: 1; }
-        .theme-switch-moon { color: #94a3b8; z-index: 1; }
+        body.light-theme .theme-switch {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.05);
+        }
+        .theme-switch-sun { color: #f59e0b; z-index: 1; position: relative; }
+        .theme-switch-moon { color: #94a3b8; z-index: 1; position: relative; }
         .theme-switch-thumb {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             background: #ffffff;
             border-radius: 50%;
             position: absolute;
@@ -326,9 +333,9 @@
             z-index: 2;
         }
         body.light-theme .theme-switch-thumb {
-            transform: translateX(-27px); /* Move to Sun side */
+            transform: translateX(-28px); /* Move to Sun side */
         }
-        body.light-theme .theme-switch-moon { color: #e2e8f0; } /* Fade moon in light mode */
+        body.light-theme .theme-switch-moon { color: #cbd5e1; } /* Fade moon in light mode */
 
         /* Extra Light Theme Fixes */
         body.light-theme footer {
