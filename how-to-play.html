@@ -125,6 +125,47 @@
         }
         
         
+        
+        /* Upgraded Theme Switch */
+        .theme-switch {
+            width: 56px;
+            height: 28px;
+            border-radius: 14px;
+            background: linear-gradient(to right, #fef3c7 50%, #1e293b 50%);
+            position: relative;
+            cursor: pointer;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        body.light-theme .theme-switch {
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .theme-switch-sun { color: #f59e0b; z-index: 1; }
+        .theme-switch-moon { color: #94a3b8; z-index: 1; }
+        .theme-switch-thumb {
+            width: 22px;
+            height: 22px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 30px; /* Default Dark Mode (Moon side) */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 2;
+        }
+        body.light-theme .theme-switch-thumb {
+            transform: translateX(-27px); /* Move to Sun side */
+        }
+        body.light-theme .theme-switch-moon { color: #e2e8f0; } /* Fade moon in light mode */
+
         /* Extra Light Theme Fixes */
         body.light-theme footer {
             background-color: var(--bg-color);
@@ -142,32 +183,10 @@
             justify-content: space-between;
             align-items: center;
         }
-        .theme-switch {
-            width: 32px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            position: relative;
-            transition: background 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .theme-switch-thumb {
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-        }
-        body.light-theme .theme-switch {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-        body.light-theme .theme-switch-thumb {
-            transform: translateX(14px);
-        }
+        
+        
+        body.light-theme 
+        body.light-theme 
 
         /* Header */
         header {
@@ -603,7 +622,7 @@
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
     <header>
         <a href="index.html" class="logo">ANIARENA</a>
@@ -623,13 +642,11 @@
                 </button>
                 <div class="profile-dropdown" id="profileDropdown">
                     <a href="#" class="profile-item">Profile</a>
-                                        <a href="#" class="profile-item theme-toggle-item" id="themeToggleBtn">
-                        <span style="display: flex; align-items: center; gap: 8px;">
-                            <svg id="themeIconSun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                            <svg id="themeIconMoon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                            <span id="themeToggleText">Appearance</span>
-                        </span>
+                                                            <a href="#" class="profile-item theme-toggle-item" id="themeToggleBtn" style="padding: 10px 16px;">
+                        <span id="themeToggleText" style="font-weight: 500;">Appearance</span>
                         <div class="theme-switch">
+                            <svg class="theme-switch-sun" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            <svg class="theme-switch-moon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                             <div class="theme-switch-thumb"></div>
                         </div>
                     </a>
@@ -696,27 +713,25 @@
         handleScroll(); // Set correct state on load
     </script>
 
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Shared Theme Toggle logic across all pages
             const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const themeIconSun = document.getElementById('themeIconSun');
-            const themeIconMoon = document.getElementById('themeIconMoon');
             
             function updateThemeUI(isLight) {
                 if (isLight) {
                     document.body.classList.add('light-theme');
-                    if(themeIconSun) themeIconSun.style.display = 'block';
-                    if(themeIconMoon) themeIconMoon.style.display = 'none';
                 } else {
                     document.body.classList.remove('light-theme');
-                    if(themeIconSun) themeIconSun.style.display = 'none';
-                    if(themeIconMoon) themeIconMoon.style.display = 'block';
                 }
             }
 
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
+            // Light mode is now default!
+            if (savedTheme === 'dark') {
+                updateThemeUI(false);
+            } else {
                 updateThemeUI(true);
             }
 
@@ -726,11 +741,11 @@
                     e.stopPropagation();
                     const isLight = document.body.classList.toggle('light-theme');
                     localStorage.setItem('theme', isLight ? 'light' : 'dark');
-                    updateThemeUI(isLight);
                 });
             }
         });
     </script>
+
 
 </body>
 </html>
